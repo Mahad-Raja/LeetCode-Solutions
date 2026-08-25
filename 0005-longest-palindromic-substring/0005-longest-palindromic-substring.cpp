@@ -1,40 +1,46 @@
 class Solution {
 public:
-bool isPalindrome(const string& s,int start,int end)
-{
-    while(start<end)
-    {
-        if(s[start]!=s[end])
-        return false;
 
-        end--;
-        start++;
-    }
-    return true;
-}
-    string longestPalindrome(string s) {
-        int maxLen=0;
-        int startIndex=0;
-        for(int i=0;i<s.size();i++)
+    string longestPalindrome(string s)
+    {
+        int start = 0;
+        int maxLen = 1;
+
+        for(int i = 0; i < s.size(); i++)
         {
-            for(int j=i;j<s.size();j++)
+            // Odd length palindrome
+            int left = i;
+            int right = i;
+
+            while(left >= 0 && right < s.size() && s[left] == s[right])
             {
-                if(isPalindrome(s,i,j))
+                if(right - left + 1 > maxLen)
                 {
-                    int len=j-i+1;
-                    if(len>maxLen)
-                    {
-                        maxLen=len;
-                        startIndex=i;
-                    }
+                    start = left;
+                    maxLen = right - left + 1;
                 }
+
+                left--;
+                right++;
+            }
+
+            // Even length palindrome
+            left = i;
+            right = i + 1;
+
+            while(left >= 0 && right < s.size() && s[left] == s[right])
+            {
+                if(right - left + 1 > maxLen)
+                {
+                    start = left;
+                    maxLen = right - left + 1;
+                }
+
+                left--;
+                right++;
             }
         }
-        string ans="";
-        for(int i=startIndex;i<startIndex+maxLen;i++)
-        {
-            ans+=s[i];
-        }
-        return ans;
+
+        return s.substr(start, maxLen);
     }
 };
